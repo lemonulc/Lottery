@@ -17,10 +17,11 @@ dubbo:
   application:
     name: Lottery
     version: 1.0.0
+    register-mode: instance
   registry:
-    address: multicast://224.5.6.7:1234
+    address: zookeeper://127.0.0.1:2181
   protocol:
-    name: dubbo
+    name: tri
     port: 20880
   scan:
     base-packages: com.hjp.lottery.rpc

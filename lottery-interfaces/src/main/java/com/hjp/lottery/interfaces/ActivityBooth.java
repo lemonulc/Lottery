@@ -8,6 +8,7 @@ import com.hjp.lottery.rpc.IActivityBooth;
 import com.hjp.lottery.rpc.dto.ActivityDto;
 import com.hjp.lottery.rpc.req.ActivityReq;
 import com.hjp.lottery.rpc.res.ActivityRes;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.dubbo.config.annotation.Service;
 
 import javax.annotation.Resource;
@@ -15,7 +16,7 @@ import javax.annotation.Resource;
 /**
  * 活动展台
  */
-@Service
+@DubboService
 public class ActivityBooth implements IActivityBooth {
     @Resource
     IActivityDao activityDao;

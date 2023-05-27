@@ -6,3 +6,9 @@
 /lottery-infrastructure/lottery-infrastructure.iml
 /lottery-interfaces/lottery-interfaces.iml
 /lottery-rpc/lottery-rpc.iml
+/lottery-rpc/target/
+/lottery-common/target/
+/lottery-domain/target/
+/lottery-interfaces/target/
+/lottery-infrastructure/target/
+/lottery-application/target/
