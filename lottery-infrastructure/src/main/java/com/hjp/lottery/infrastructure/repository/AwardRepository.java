@@ -1,4 +1,4 @@
-package com.hjp.lottery.domain.award.repository.impl;
+package com.hjp.lottery.infrastructure.repository;
 
 import com.hjp.lottery.domain.award.repository.IAwardRepository;
 import org.springframework.stereotype.Component;

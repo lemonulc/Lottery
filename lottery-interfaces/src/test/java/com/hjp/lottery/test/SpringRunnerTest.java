@@ -2,6 +2,12 @@ package com.hjp.lottery.test;
 
 import com.alibaba.fastjson.JSON;
 import com.hjp.lottery.common.Constants;
+import com.hjp.lottery.domain.activity.model.req.ActivityConfigReq;
+import com.hjp.lottery.domain.activity.model.vo.ActivityVO;
+import com.hjp.lottery.domain.activity.model.vo.StrategyDetailVO;
+import com.hjp.lottery.domain.activity.model.vo.StrategyVO;
+import com.hjp.lottery.domain.activity.service.deploy.IActivityDeploy;
+import com.hjp.lottery.domain.activity.service.stateflow.IStateHandler;
 import com.hjp.lottery.domain.award.model.req.GoodsReq;
 import com.hjp.lottery.domain.award.model.res.DistributionRes;
 import com.hjp.lottery.domain.award.service.factory.DistributionGoodsFactory;
@@ -12,6 +18,7 @@ import com.hjp.lottery.domain.strategy.model.vo.DrawAwardInfo;
 import com.hjp.lottery.domain.strategy.service.draw.IDrawExec;
 import com.hjp.lottery.infrastructure.dao.IActivityDao;
 import com.hjp.lottery.infrastructure.po.Activity;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -20,6 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -42,6 +50,18 @@ public class SpringRunnerTest {
 
     @Resource
     DistributionGoodsFactory distributionGoodsFactory;
+
+    @Resource
+    IStateHandler stateHandler;
+
+    @Test
+    public void test_alterState() {
+        logger.info("提交审核，测试：{}", JSON.toJSONString(stateHandler.arraignment(100001L, Constants.ActivityState.EDIT)));
+        logger.info("审核通过，测试：{}", JSON.toJSONString(stateHandler.checkPass(100001L, Constants.ActivityState.ARRAIGNMENT)));
+        logger.info("运行活动，测试：{}", JSON.toJSONString(stateHandler.doing(100001L, Constants.ActivityState.PASS)));
+        logger.info("二次提审，测试：{}", JSON.toJSONString(stateHandler.checkPass(100001L, Constants.ActivityState.EDIT)));
+    }
+
 
     @Test
     public void test_award() {
