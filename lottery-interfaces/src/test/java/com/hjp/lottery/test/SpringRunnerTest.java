@@ -1,7 +1,14 @@
 package com.hjp.lottery.test;
 
 import com.alibaba.fastjson.JSON;
+import com.hjp.lottery.common.Constants;
+import com.hjp.lottery.domain.award.model.req.GoodsReq;
+import com.hjp.lottery.domain.award.model.res.DistributionRes;
+import com.hjp.lottery.domain.award.service.factory.DistributionGoodsFactory;
+import com.hjp.lottery.domain.award.service.goods.IDistributionGoods;
 import com.hjp.lottery.domain.strategy.model.req.DrawReq;
+import com.hjp.lottery.domain.strategy.model.res.DrawResult;
+import com.hjp.lottery.domain.strategy.model.vo.DrawAwardInfo;
 import com.hjp.lottery.domain.strategy.service.draw.IDrawExec;
 import com.hjp.lottery.infrastructure.dao.IActivityDao;
 import com.hjp.lottery.infrastructure.po.Activity;
@@ -32,6 +39,32 @@ public class SpringRunnerTest {
 
     @Resource
     private IDrawExec drawExec;
+
+    @Resource
+    DistributionGoodsFactory distributionGoodsFactory;
+
+    @Test
+    public void test_award() {
+        // 执行抽奖
+        DrawResult drawResult = drawExec.doDrawExec(new DrawReq("小傅哥", 10001L));
+
+        // 判断抽奖结果
+        Integer drawState = drawResult.getDrawState();
+        if (Constants.DrawState.FAIL.getCode().equals(drawState)) {
+            logger.info("未中奖 DrawAwardInfo is null");
+            return;
+        }
+
+        // 封装发奖参数，orderId：2109313442431 为模拟ID，需要在用户参与领奖活动时生成
+        DrawAwardInfo drawAwardInfo = drawResult.getDrawAwardInfo();
+        GoodsReq goodsReq = new GoodsReq(drawResult.getuId(), "2109313442431", drawAwardInfo.getAwardId(), drawAwardInfo.getAwardName(), drawAwardInfo.getAwardContent());
+
+        // 根据 awardType 从抽奖工厂中获取对应的发奖服务
+        IDistributionGoods distributionGoodsService = distributionGoodsFactory.getDistributionGoodsService(drawAwardInfo.getAwardType());
+        DistributionRes distributionRes = distributionGoodsService.doDistribution(goodsReq);
+
+        logger.info("测试结果：{}", JSON.toJSONString(distributionRes));
+    }
 
     @Test
     public void test_drawExec() {
