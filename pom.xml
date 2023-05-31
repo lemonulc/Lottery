@@ -74,6 +74,11 @@
                 <artifactId>hutool-all</artifactId>
                 <version>5.5.0</version>
             </dependency>
+            <dependency>
+                <groupId>com.hjp.middleware.db.router</groupId>
+                <artifactId>db-router-spring-boot-starter</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <build>
